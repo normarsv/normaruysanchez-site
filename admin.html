@@ -280,29 +280,66 @@
     td:nth-child(5) { width: 120px; }
     td:nth-child(6) { width: 90px; text-align: center; }
 
-    /* STATUS SELECT */
-    select {
+    /* STATUS PILL BUTTON */
+    .status-btn {
       font-family: inherit;
-      font-size: 12px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 5px 8px;
-      color: var(--muted);
-      background: transparent;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 20px;
       cursor: pointer;
-      width: 100%;
-      transition: border-color 0.15s;
-      appearance: none;
-      -webkit-appearance: none;
+      white-space: nowrap;
+      transition: all 0.15s;
+      border: 1px solid;
     }
-    select:focus { outline: none; border-color: var(--border-hover); color: var(--text); }
-    select option { background: #111; color: #fff; }
+    .status-btn[data-status=""]         { background: transparent; color: var(--muted2); border-color: var(--border); }
+    .status-btn[data-status="applied"]  { background: rgba(96,165,250,0.12);  color: #60a5fa; border-color: rgba(96,165,250,0.35); }
+    .status-btn[data-status="interview"]{ background: rgba(245,158,11,0.12);  color: #f59e0b; border-color: rgba(245,158,11,0.35); }
+    .status-btn[data-status="offer"]    { background: rgba(52,211,153,0.12);  color: #34d399; border-color: rgba(52,211,153,0.35); }
+    .status-btn[data-status="pass"]     { background: rgba(248,113,113,0.08); color: #f87171; border-color: rgba(248,113,113,0.25); }
+    .status-btn:hover { filter: brightness(1.15); }
 
     /* STATUS ROW TINTS */
-    tr.status-applied   { background: rgba(96,165,250,0.06); }
-    tr.status-interview { background: rgba(245,158,11,0.07); }
-    tr.status-offer     { background: rgba(52,211,153,0.07); }
-    tr.status-pass      { opacity: 0.4; }
+    tr.status-applied   { background: rgba(96,165,250,0.05); }
+    tr.status-interview { background: rgba(245,158,11,0.06); }
+    tr.status-offer     { background: rgba(52,211,153,0.06); }
+    tr.status-pass      { opacity: 0.35; }
+
+    /* FILTER BAR */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .filter-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted2);
+      margin-right: 4px;
+    }
+    .filter-btn {
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-btn:hover { border-color: var(--border-hover); color: var(--text); }
+    .filter-btn.active { background: var(--text); color: #000; border-color: var(--text); }
+    .filter-btn.active[data-filter="applied"]  { background: #60a5fa; border-color: #60a5fa; color: #000; }
+    .filter-btn.active[data-filter="interview"]{ background: #f59e0b; border-color: #f59e0b; color: #000; }
+    .filter-btn.active[data-filter="offer"]    { background: #34d399; border-color: #34d399; color: #000; }
+    .filter-btn.active[data-filter="pass"]     { background: #f87171; border-color: #f87171; color: #000; }
+    .filter-btn.active[data-filter="todo"]     { background: rgba(255,255,255,0.15); color: var(--text); border-color: var(--border-hover); }
 
     /* VISA BADGE */
     .visa {
@@ -492,6 +529,17 @@
         <div class="legend-item"><div class="dot dot-pass"></div> Pass</div>
       </div>
 
+      <!-- ── FILTER BAR ── -->
+      <div class="filter-bar">
+        <span class="filter-label">Filter</span>
+        <button class="filter-btn active" data-filter="" onclick="setFilter(this, '')">All</button>
+        <button class="filter-btn" data-filter="todo" onclick="setFilter(this, 'todo')">To apply</button>
+        <button class="filter-btn" data-filter="applied" onclick="setFilter(this, 'applied')">Applied</button>
+        <button class="filter-btn" data-filter="interview" onclick="setFilter(this, 'interview')">Interview</button>
+        <button class="filter-btn" data-filter="offer" onclick="setFilter(this, 'offer')">Offer</button>
+        <button class="filter-btn" data-filter="pass" onclick="setFilter(this, 'pass')">Pass</button>
+      </div>
+
       <!-- ── LIVE OPENINGS ── -->
       <div class="live-header">
         <div class="live-dot"></div>
@@ -512,7 +560,7 @@
               <td style="font-weight:600">Director, Support Engineering (EMEA)</td>
               <td style="color:var(--muted);font-size:13px">Remote · UK</td>
               <td><span class="fit-tag fit-support">Support</span></td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://job-boards.greenhouse.io/gitlab/jobs/8629005002" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="live-synthesia-csm-spanish">
@@ -521,7 +569,7 @@
               <td style="font-weight:600">Strategic CSM — Spanish Speaking</td>
               <td style="color:var(--muted);font-size:13px">Europe · Remote</td>
               <td><span class="fit-tag fit-cs">Cust. Success</span></td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://jobs.ashbyhq.com/synthesia/b8d27ddc-dd45-452e-8d24-7e44c17d33c8" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="live-synthesia-cs">
@@ -530,7 +578,7 @@
               <td style="font-weight:600">Manager, Scaled Customer Success</td>
               <td style="color:var(--muted);font-size:13px">London · Hybrid</td>
               <td><span class="fit-tag fit-cs">Cust. Success</span></td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://jobs.ashbyhq.com/synthesia/d4a59223-9669-48d5-ad5d-91a9e71370d0" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="live-synthesia-pm-enterprise">
@@ -539,7 +587,7 @@
               <td style="font-weight:600">Product Manager, Enterprise</td>
               <td style="color:var(--muted);font-size:13px">London · Hybrid</td>
               <td><span class="fit-tag fit-pm">AI PM</span></td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://jobs.ashbyhq.com/synthesia/31e1dca3-74fd-4f74-8f40-5bb19f4034bb" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="live-paddle-spm-dashboard">
@@ -548,7 +596,7 @@
               <td style="font-weight:600">Senior Product Manager, Dashboard</td>
               <td style="color:var(--muted);font-size:13px">UK · Remote</td>
               <td><span class="fit-tag fit-pm">AI PM</span></td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://jobs.ashbyhq.com/paddle/bf1b5606-58c2-46ce-8638-ed8b946fb7f6" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="live-paddle-spm-retain">
@@ -557,7 +605,7 @@
               <td style="font-weight:600">Senior Product Manager, Retain</td>
               <td style="color:var(--muted);font-size:13px">UK · Remote</td>
               <td><span class="fit-tag fit-pm">AI PM</span></td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://jobs.ashbyhq.com/paddle/f112f17b-c1e5-41f6-ab8b-a0ceef0dde59" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="live-paddle-staff-pm">
@@ -566,7 +614,7 @@
               <td style="font-weight:600">Staff Product Manager</td>
               <td style="color:var(--muted);font-size:13px">London · Remote</td>
               <td><span class="fit-tag fit-pm">AI PM</span></td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://jobs.ashbyhq.com/paddle/70437d49-e165-4380-b5f0-5bddbac94a0f" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="live-gocardless-spm">
@@ -575,7 +623,7 @@
               <td style="font-weight:600">Senior Product Manager</td>
               <td style="color:var(--muted);font-size:13px">London</td>
               <td><span class="fit-tag fit-pm">AI PM</span></td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://job-boards.greenhouse.io/gocardless/jobs/8064518" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="live-intercom-csm-ent">
@@ -584,7 +632,7 @@
               <td style="font-weight:600">Principal CSM, Enterprise</td>
               <td style="color:var(--muted);font-size:13px">London</td>
               <td><span class="fit-tag fit-cs">Cust. Success</span></td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://job-boards.greenhouse.io/intercom/jobs/7994422" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="live-intercom-tpm">
@@ -593,7 +641,7 @@
               <td style="font-weight:600">Technology Enablement PM</td>
               <td style="color:var(--muted);font-size:13px">London / Dublin</td>
               <td><span class="fit-tag fit-tpm">TPM</span></td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://job-boards.greenhouse.io/intercom/jobs/8053727" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="live-gitlab-csm-uk">
@@ -602,7 +650,7 @@
               <td style="font-weight:600">Customer Success Manager</td>
               <td style="color:var(--muted);font-size:13px">Remote · UK</td>
               <td><span class="fit-tag fit-cs">Cust. Success</span></td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://job-boards.greenhouse.io/gitlab/jobs/8618112002" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="live-grafana-spm-uk">
@@ -611,7 +659,7 @@
               <td style="font-weight:600">Sr PM, Infrastructure Observability</td>
               <td style="color:var(--muted);font-size:13px">Remote · UK</td>
               <td><span class="fit-tag fit-pm">AI PM</span></td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://job-boards.greenhouse.io/grafanalabs/jobs/6008083004" target="_blank">Apply ↗</a></td>
             </tr>
           </tbody>
@@ -633,7 +681,7 @@
               <td>GitLab</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td><strong style="color:var(--text)">Director, Support (EMEA) open now — Remote UK.</strong> All-remote US company = SVV-safe. Top priority application.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://job-boards.greenhouse.io/gitlab/jobs/8629005002" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="grafana">
@@ -641,7 +689,7 @@
               <td>Grafana Labs</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>Remote-first, observability product closest to Datadog. UK-registered. You know this space cold.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://job-boards.greenhouse.io/grafanalabs" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="elastic">
@@ -649,7 +697,7 @@
               <td>Elastic</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>Remote-first, distributed observability/search. Similar customer profile to Datadog. Known sponsor.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://www.elastic.co/about/careers" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="incident">
@@ -657,7 +705,7 @@
               <td>incident.io</td>
               <td><span class="visa visa-maybe">Maybe</span></td>
               <td>London startup growing fast. Support is central to product credibility. Small team = high-impact role.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://incident.io/careers" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="intercom">
@@ -665,7 +713,7 @@
               <td>Intercom</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>Customer messaging platform — support is core to their identity. Strong UK presence, known sponsor.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://www.intercom.com/careers" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="paddle">
@@ -673,7 +721,7 @@
               <td>Paddle</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>UK-based SaaS payments, remote-friendly. Technical support is high-stakes here. Scaling rapidly.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://www.paddle.com/careers" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="wise">
@@ -681,7 +729,7 @@
               <td>Wise</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>London HQ, remote-friendly, known Skilled Worker sponsor. Global scale, strong data culture.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://wise.com/gb/careers" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="gocardless">
@@ -689,7 +737,7 @@
               <td>GoCardless</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>London fintech, remote-friendly. Payments infra with demanding technical clients. SLA background fits.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://gocardless.com/about/careers/" target="_blank">Apply ↗</a></td>
             </tr>
           </tbody>
@@ -711,7 +759,7 @@
               <td>The Telegraph</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td><strong style="color:var(--text)">You led their delivery team at 3 Pillar.</strong> Direct prior relationship — mention the engagement by name.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://www.telegraph.co.uk/about-us/careers/" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="guardian">
@@ -719,7 +767,7 @@
               <td>Guardian Media</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>London digital media, similar profile to The Telegraph. Large engineering org, Agile at scale.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://workforus.theguardian.com/" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="monzo">
@@ -727,7 +775,7 @@
               <td>Monzo</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>UK neobank, remote-friendly, strong engineering culture. Complex cross-functional programmes. Known sponsor.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://monzo.com/careers/" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="deliveroo">
@@ -735,7 +783,7 @@
               <td>Deliveroo</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>London tech scale-up, large engineering org, known sponsor. High-complexity logistics platform.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://careers.deliveroo.co.uk/" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="starling">
@@ -743,7 +791,7 @@
               <td>Starling Bank</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>UK digital bank, remote-friendly, growing fast. Tech-first culture. TPM roles spanning engineering and compliance.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://www.starlingbank.com/careers/" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="asos">
@@ -751,7 +799,7 @@
               <td>ASOS</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>UK e-commerce, large tech org, known sponsor. Engineering programmes at scale.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://careers.asos.com/" target="_blank">Apply ↗</a></td>
             </tr>
           </tbody>
@@ -773,7 +821,7 @@
               <td>PolyAI</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td><strong style="color:var(--text)">You understand their end user better than most PMs they'll interview.</strong> London AI for customer service.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://poly.ai/careers/" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="synthesia">
@@ -781,7 +829,7 @@
               <td>Synthesia</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>London AI video platform, scaling fast. Technical PM at the intersection of AI and real-world deployment.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://www.synthesia.io/careers" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="faculty">
@@ -789,7 +837,7 @@
               <td>Faculty AI</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>London AI products. PM roles bridging technical teams and enterprise clients — your stakeholder background is relevant.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://faculty.ai/careers/" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="onfido">
@@ -797,7 +845,7 @@
               <td>Entrust <span style="color:var(--muted2);font-size:11px;font-weight:400">(fmr Onfido)</span></td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>Onfido acquired by Entrust in 2024. AI identity verification now under Entrust. Check Entrust careers for AI/ML PM roles.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://www.entrust.com/careers/" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="featurespace">
@@ -805,7 +853,7 @@
               <td>Visa <span style="color:var(--muted2);font-size:11px;font-weight:400">(fmr Featurespace)</span></td>
               <td><span class="visa visa-maybe">Maybe</span></td>
               <td>Featurespace acquired by Visa in 2024. AI fraud detection tech now under Visa. Check Visa UK careers for AI/ML PM roles.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://www.visa.co.uk/careers/" target="_blank">Apply ↗</a></td>
             </tr>
           </tbody>
@@ -827,7 +875,7 @@
               <td>Intercom</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>Customer messaging platform — CS is their core identity. London HQ, known sponsor. Principal CSM Enterprise open now.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://job-boards.greenhouse.io/intercom/jobs/7994422" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="pleo-cs">
@@ -835,7 +883,7 @@
               <td>Pleo</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>UK/EU fintech, Director CS open in London. Fast-growing spend management platform. CS Manager UK&amp;I also open.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://jobs.ashbyhq.com/pleo/7f9bad69-94b8-4aa1-916a-1d810872489f" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="synthesia-cs">
@@ -843,7 +891,7 @@
               <td>Synthesia</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>Strategic CSM Spanish Speaking open (Europe Remote). Native Spanish is a hard filter — differentiator for you.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://jobs.ashbyhq.com/synthesia/b8d27ddc-dd45-452e-8d24-7e44c17d33c8" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="hubspot-cs">
@@ -851,7 +899,7 @@
               <td>HubSpot</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>CRM platform, strong UK/EMEA presence. CS roles at scale. Known visa sponsor, remote-friendly.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://www.hubspot.com/careers" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="gitlab-cs">
@@ -859,7 +907,7 @@
               <td>GitLab</td>
               <td><span class="visa visa-maybe">Maybe</span></td>
               <td>All-remote = SVV-friendly. CSM (Remote UK) open now + Director Support EMEA. Multiple UK-eligible roles.</td>
-              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><button class="status-btn" data-status="" onclick="cycleStatus(this)">To apply</button></td>
               <td><a class="apply-btn" href="https://job-boards.greenhouse.io/gitlab/jobs/8618112002" target="_blank">Apply ↗</a></td>
             </tr>
           </tbody>
@@ -902,10 +950,17 @@
   </div><!-- /content -->
 
   <script>
-    // ── Change this to your preferred password ──
     const PASSWORD    = 'norma2026';
     const SESSION_KEY = 'admin_authed';
     const STORAGE_KEY = 'job_tracker_statuses';
+
+    const STATUSES = [
+      { value: '',          label: 'To apply'  },
+      { value: 'applied',   label: 'Applied'   },
+      { value: 'interview', label: 'Interview' },
+      { value: 'offer',     label: 'Offer'     },
+      { value: 'pass',      label: 'Pass'      },
+    ];
 
     if (sessionStorage.getItem(SESSION_KEY) === '1') showContent();
 
@@ -936,17 +991,30 @@
       location.reload();
     }
 
-    function updateStatus(sel) {
-      const row = sel.closest('tr');
-      row.className = sel.value ? 'status-' + sel.value : '';
+    function cycleStatus(btn) {
+      const row = btn.closest('tr');
+      const current = btn.dataset.status || '';
+      const idx = STATUSES.findIndex(s => s.value === current);
+      const next = STATUSES[(idx + 1) % STATUSES.length];
+      setRowStatus(row, next.value);
       saveStatuses();
       updateCounts();
+      applyFilter();
+    }
+
+    function setRowStatus(row, value) {
+      const btn = row.querySelector('.status-btn');
+      const status = STATUSES.find(s => s.value === value) || STATUSES[0];
+      btn.dataset.status = value;
+      btn.textContent = status.label;
+      row.dataset.status = value;
+      row.className = value ? 'status-' + value : '';
     }
 
     function saveStatuses() {
       const data = {};
       document.querySelectorAll('tbody tr[data-id]').forEach(row => {
-        data[row.dataset.id] = row.querySelector('select').value;
+        data[row.dataset.id] = row.dataset.status || '';
       });
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
@@ -954,16 +1022,14 @@
     function loadStatuses() {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
       document.querySelectorAll('tbody tr[data-id]').forEach(row => {
-        const val = saved[row.dataset.id] || '';
-        row.querySelector('select').value = val;
-        row.className = val ? 'status-' + val : '';
+        setRowStatus(row, saved[row.dataset.id] || '');
       });
     }
 
     function updateCounts() {
       const c = { todo: 0, applied: 0, interview: 0, offer: 0 };
       document.querySelectorAll('tbody tr[data-id]').forEach(row => {
-        const v = row.querySelector('select').value;
+        const v = row.dataset.status || '';
         if (!v)                c.todo++;
         else if (v === 'applied')   c.applied++;
         else if (v === 'interview') c.interview++;
@@ -973,6 +1039,27 @@
       document.getElementById('count-applied').textContent   = c.applied;
       document.getElementById('count-interview').textContent = c.interview;
       document.getElementById('count-offer').textContent     = c.offer;
+    }
+
+    let currentFilter = '';
+
+    function setFilter(btn, filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilter();
+    }
+
+    function applyFilter() {
+      document.querySelectorAll('tbody tr[data-id]').forEach(row => {
+        if (!currentFilter) {
+          row.style.display = '';
+        } else if (currentFilter === 'todo') {
+          row.style.display = (!row.dataset.status || row.dataset.status === '') ? '' : 'none';
+        } else {
+          row.style.display = row.dataset.status === currentFilter ? '' : 'none';
+        }
+      });
     }
   </script>
 
