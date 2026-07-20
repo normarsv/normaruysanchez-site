@@ -387,6 +387,51 @@
     }
     .cadence-box li strong { color: var(--text); }
 
+    /* ── LIVE OPENINGS ── */
+    .live-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .live-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 8px #4ade80;
+      animation: pulse-dot 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; box-shadow: 0 0 8px #4ade80; }
+      50%       { opacity: 0.6; box-shadow: 0 0 3px #4ade80; }
+    }
+    .live-badge {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #4ade80;
+    }
+    .live-date {
+      font-size: 11px;
+      color: var(--muted2);
+      margin-left: auto;
+    }
+    td.role-fit {
+      width: 110px;
+    }
+    .fit-tag {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .fit-support  { background: rgba(96,165,250,0.1);  color: #60a5fa; border: 1px solid rgba(96,165,250,0.2); }
+    .fit-pm       { background: rgba(167,139,250,0.1); color: #a78bfa; border: 1px solid rgba(167,139,250,0.2); }
+    .fit-cs       { background: rgba(251,191,36,0.1);  color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 700px) {
       .platform-grid { grid-template-columns: 1fr; }
@@ -444,6 +489,78 @@
         <div class="legend-item"><div class="dot dot-interview"></div> Interview</div>
         <div class="legend-item"><div class="dot dot-offer"></div> Offer</div>
         <div class="legend-item"><div class="dot dot-pass"></div> Pass</div>
+      </div>
+
+      <!-- ── LIVE OPENINGS ── -->
+      <div class="live-header">
+        <div class="live-dot"></div>
+        <div class="live-badge">Live Openings</div>
+        <div class="live-date">Scanned July 2026</div>
+      </div>
+      <div class="section-title" style="margin-bottom:8px">Roles Open Right Now</div>
+      <p class="section-note">Matched to your profile from target companies. Apply to these first.</p>
+      <div class="table-wrap" style="margin-bottom:56px">
+        <table>
+          <thead>
+            <tr><th>#</th><th>Company</th><th>Role</th><th>Location</th><th class="role-fit">Fit</th><th>Status</th><th>Apply</th></tr>
+          </thead>
+          <tbody>
+            <tr data-id="live-synthesia-cs">
+              <td>1</td>
+              <td>Synthesia</td>
+              <td style="font-weight:600">Manager, Scaled Customer Success</td>
+              <td style="color:var(--muted);font-size:13px">London · Hybrid</td>
+              <td><span class="fit-tag fit-cs">Cust. Success</span></td>
+              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><a class="apply-btn" href="https://jobs.synthesia.io/jobs/d4a59223-9669-48d5-ad5d-91a9e71370d0" target="_blank">Apply ↗</a></td>
+            </tr>
+            <tr data-id="live-synthesia-pm-enterprise">
+              <td>2</td>
+              <td>Synthesia</td>
+              <td style="font-weight:600">Product Manager, Enterprise</td>
+              <td style="color:var(--muted);font-size:13px">London · Hybrid</td>
+              <td><span class="fit-tag fit-pm">AI PM</span></td>
+              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><a class="apply-btn" href="https://jobs.synthesia.io/jobs/31e1dca3-74fd-4f74-8f40-5bb19f4034bb" target="_blank">Apply ↗</a></td>
+            </tr>
+            <tr data-id="live-paddle-spm-dashboard">
+              <td>3</td>
+              <td>Paddle</td>
+              <td style="font-weight:600">Senior Product Manager, Dashboard</td>
+              <td style="color:var(--muted);font-size:13px">UK · Remote</td>
+              <td><span class="fit-tag fit-pm">AI PM</span></td>
+              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><a class="apply-btn" href="https://jobs.ashbyhq.com/paddle/bf1b5606-58c2-46ce-8638-ed8b946fb7f6" target="_blank">Apply ↗</a></td>
+            </tr>
+            <tr data-id="live-paddle-spm-retain">
+              <td>4</td>
+              <td>Paddle</td>
+              <td style="font-weight:600">Senior Product Manager, Retain</td>
+              <td style="color:var(--muted);font-size:13px">UK · Remote</td>
+              <td><span class="fit-tag fit-pm">AI PM</span></td>
+              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><a class="apply-btn" href="https://jobs.ashbyhq.com/paddle/f112f17b-c1e5-41f6-ab8b-a0ceef0dde59" target="_blank">Apply ↗</a></td>
+            </tr>
+            <tr data-id="live-paddle-staff-pm">
+              <td>5</td>
+              <td>Paddle</td>
+              <td style="font-weight:600">Staff Product Manager</td>
+              <td style="color:var(--muted);font-size:13px">London · Remote</td>
+              <td><span class="fit-tag fit-pm">AI PM</span></td>
+              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><a class="apply-btn" href="https://jobs.ashbyhq.com/paddle/70437d49-e165-4380-b5f0-5bddbac94a0f" target="_blank">Apply ↗</a></td>
+            </tr>
+            <tr data-id="live-gocardless-spm">
+              <td>6</td>
+              <td>GoCardless</td>
+              <td style="font-weight:600">Senior Product Manager</td>
+              <td style="color:var(--muted);font-size:13px">London</td>
+              <td><span class="fit-tag fit-pm">AI PM</span></td>
+              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><a class="apply-btn" href="https://job-boards.greenhouse.io/gocardless/jobs/8064518" target="_blank">Apply ↗</a></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <!-- ── HEAD OF SUPPORT ── -->
