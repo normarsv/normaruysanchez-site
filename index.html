@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Norma Ruy Sanchez — Technical Support Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #000;
+      --border: rgba(255,255,255,0.08);
+      --border-hover: rgba(255,255,255,0.18);
+      --text: #fff;
+      --muted: rgba(255,255,255,0.5);
+      --muted2: rgba(255,255,255,0.35);
+      --surface: rgba(255,255,255,0.03);
+      --surface-hover: rgba(255,255,255,0.06);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Geist', system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── GRID BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── GLOW SPOTS ── */
+    .glow-top {
+      position: fixed;
+      top: -300px; left: 50%;
+      transform: translateX(-50%);
+      width: 800px; height: 600px;
+      background: radial-gradient(ellipse, rgba(255,255,255,0.04) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 32px;
+      height: 64px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(16px);
+    }
+    .nav-logo {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: var(--text);
+    }
+    .nav-links {
+      display: flex;
+      gap: 0;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--surface-hover); }
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav-btn {
+      font-size: 13px;
+      font-weight: 500;
+      padding: 7px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: transparent;
+    }
+    .nav-btn:hover { border-color: var(--border-hover); color: var(--text); }
+    .nav-btn-dark {
+      background: var(--text);
+      color: #000;
+      border-color: transparent;
+      font-weight: 600;
+    }
+    .nav-btn-dark:hover { background: rgba(255,255,255,0.85); color: #000; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 140px 32px 100px;
+    }
+    .hero-photo {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      margin-bottom: 28px;
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.04);
+    }
+    .hero-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+      background: var(--surface);
+    }
+    .hero-eyebrow span {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 8px #4ade80;
+      flex-shrink: 0;
+    }
+    h1 {
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      line-height: 1.15;
+      color: var(--text);
+      max-width: 640px;
+      margin-bottom: 20px;
+    }
+    .hero-sub {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 36px;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 64px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+    }
+    .btn-white {
+      background: var(--text);
+      color: #000;
+    }
+    .btn-white:hover { background: rgba(255,255,255,0.85); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { color: var(--text); border-color: var(--border-hover); }
+
+    /* Stats row */
+    .hero-stats {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .stat {
+      padding: 20px 40px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-num {
+      display: block;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: var(--text);
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── SECTIONS ── */
+    .section {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 32px;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    .section-eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(28px, 3vw, 40px);
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      color: var(--text);
+    }
+
+    /* ── EXPERIENCE TABS ── */
+    .exp-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      min-height: 380px;
+    }
+    .exp-tabs {
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+    .exp-tab {
+      padding: 18px 20px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      border-left: 2px solid transparent;
+      transition: all 0.15s;
+      line-height: 1.4;
+    }
+    .exp-tab:last-child { border-bottom: none; }
+    .exp-tab:hover { background: var(--surface-hover); color: var(--text); }
+    .exp-tab.active {
+      color: var(--text);
+      background: var(--surface-hover);
+      border-left-color: var(--text);
+    }
+    .exp-tab-company { display: block; font-weight: 600; font-size: 13px; margin-bottom: 3px; }
+    .exp-tab-date { display: block; font-size: 11px; color: var(--muted2); }
+
+    .exp-panels { position: relative; }
+    .exp-panel {
+      display: none;
+      padding: 36px 40px;
+      animation: panelFade 0.2s ease;
+    }
+    .exp-panel.active { display: block; }
+    @keyframes panelFade {
+      from { opacity: 0; transform: translateX(8px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .exp-panel-role {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .exp-panel-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .exp-panel-company {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .exp-panel-date {
+      font-size: 11px;
+      color: var(--muted2);
+      border: 1px solid var(--border);
+      padding: 2px 10px;
+      border-radius: 20px;
+      background: var(--surface);
+    }
+    .exp-panel ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .exp-panel ul li {
+      font-size: 14px;
+      color: rgba(255,255,255,0.65);
+      padding-left: 20px;
+      position: relative;
+      line-height: 1.6;
+    }
+    .exp-panel ul li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 9px;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--muted2);
+    }
+    .exp-metrics {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .exp-metric {
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--surface-hover);
+      border: 1px solid var(--border);
+      padding: 4px 12px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .exp-metric i { font-size: 10px; }
+
+    @media (max-width: 700px) {
+      .exp-layout { grid-template-columns: 1fr; }
+      .exp-tabs { flex-direction: row; overflow-x: auto; border-right: none; border-bottom: 1px solid var(--border); }
+      .exp-tab { border-left: none; border-bottom: 2px solid transparent; border-right: 1px solid var(--border); white-space: nowrap; }
+      .exp-tab.active { border-bottom-color: var(--text); border-left-color: transparent; }
+      .exp-tab:last-child { border-right: none; }
+      .exp-panel { padding: 24px 20px; }
+    }
+
+    /* ── SKILLS ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .skill-card {
+      padding: 32px;
+      border-right: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+    .skill-card:last-child { border-right: none; }
+    .skill-card:hover { background: var(--surface-hover); }
+    .skill-icon {
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+    .skill-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 12px;
+      letter-spacing: -0.2px;
+    }
+    .skill-tags {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .skill-tag {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* ── CONTACT ── */
+    .contact-box {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 64px 32px;
+      text-align: center;
+      background: var(--surface);
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-box::before {
+      content: '';
+      position: absolute;
+      top: -100px; left: 50%;
+      transform: translateX(-50%);
+      width: 400px; height: 300px;
+      background: radial-gradient(ellipse, rgba(255,255,255,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .contact-box h2 {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      margin-bottom: 12px;
+    }
+    .contact-box p {
+      color: var(--muted);
+      font-size: 16px;
+      margin-bottom: 32px;
+    }
+    .contact-links {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 28px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 100%;
+    }
+    .footer-left { font-size: 13px; color: var(--muted2); }
+    .footer-right { display: flex; gap: 20px; }
+    .footer-right a { font-size: 13px; color: var(--muted2); text-decoration: none; transition: color 0.15s; }
+    .footer-right a:hover { color: var(--text); }
+
+    /* ── HERO ENTRANCE ANIMATIONS ── */
+    @keyframes heroFadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; box-shadow: 0 0 8px #4ade80; }
+      50%       { opacity: 0.6; box-shadow: 0 0 3px #4ade80; }
+    }
+
+    .hero-photo     { animation: heroFadeUp 0.6s ease 0.05s both; }
+    .hero-eyebrow   { animation: heroFadeUp 0.6s ease 0.15s both; }
+    h1              { animation: heroFadeUp 0.6s ease 0.25s both; }
+    .hero-sub       { animation: heroFadeUp 0.6s ease 0.35s both; }
+    .hero-actions   { animation: heroFadeUp 0.6s ease 0.45s both; }
+    .hero-stats     { animation: heroFadeUp 0.6s ease 0.55s both; }
+
+    /* Shimmer on title */
+    h1 {
+      background: linear-gradient(
+        90deg,
+        #fff 0%,
+        #fff 35%,
+        rgba(255,255,255,0.5) 50%,
+        #fff 65%,
+        #fff 100%
+      );
+      background-size: 800px 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: heroFadeUp 0.6s ease 0.25s both, shimmer 3s ease 0.8s 1;
+    }
+
+    /* Pulse on the green dot */
+    .hero-eyebrow span { animation: pulse-dot 2s ease-in-out infinite; }
+
+    /* ── SCROLL FADE IN ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .experience-grid { grid-template-columns: 1fr 1fr; }
+      .exp-card:nth-child(3n) { border-right: 1px solid var(--border); }
+      .exp-card:nth-child(2n) { border-right: none; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .skill-card { border-right: none; border-bottom: 1px solid var(--border); }
+      .skill-card:last-child { border-bottom: none; }
+      .hero-stats { flex-direction: column; }
+      .stat { border-right: none; border-bottom: 1px solid var(--border); }
+      .stat:last-child { border-bottom: none; }
+    }
+    @media (max-width: 600px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      h1 { letter-spacing: -1.5px; }
+      .experience-grid { grid-template-columns: 1fr; }
+      .exp-card { border-right: none; }
+      .section { padding: 60px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glow-top"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Norma Ruy Sanchez</div>
+    <ul class="nav-links">
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="https://www.linkedin.com/in/normars/" target="_blank" class="nav-btn">LinkedIn <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:11px"></i></a>
+      <a href="Norma-Ruy-Sanchez-CV.pdf" download class="nav-btn nav-btn-dark">Download CV</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-photo">
+      <img src="photo.png" alt="Norma Ruy Sanchez">
+    </div>
+    <div class="hero-eyebrow">
+      <span></span>
+      Open to remote opportunities
+    </div>
+    <h1>Technical Support<br>Manager & People<br>Leader</h1>
+    <p class="hero-sub">
+      10+ years building and scaling high-performance engineering support teams at global tech companies. Currently at Datadog.
+    </p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn btn-white">Get in touch</a>
+      <a href="Norma-Ruy-Sanchez-CV.pdf" download class="btn btn-ghost">Download CV</a>
+      <a href="https://www.linkedin.com/in/normars/" target="_blank" class="btn btn-ghost">LinkedIn <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:11px"></i></a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">10+</span>
+        <div class="stat-label">Years experience</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">20</span>
+        <div class="stat-label">People led</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">25%</span>
+        <div class="stat-label">Sprint velocity increase</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">50%</span>
+        <div class="stat-label">Cost savings delivered</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- EXPERIENCE -->
+  <div class="section" id="experience">
+    <div class="section-header fade-up">
+      <div class="section-eyebrow">Career</div>
+      <div class="section-title">Work Experience</div>
+    </div>
+    <div class="experience-grid fade-up exp-layout">
+
+      <!-- TABS -->
+      <div class="exp-tabs">
+        <button class="exp-tab active" onclick="switchTab(0)">
+          <span class="exp-tab-company">Datadog</span>
+          <span class="exp-tab-date">2024 – Present</span>
+        </button>
+        <button class="exp-tab" onclick="switchTab(1)">
+          <span class="exp-tab-company">3 Pillar Global</span>
+          <span class="exp-tab-date">2022 – 2024</span>
+        </button>
+        <button class="exp-tab" onclick="switchTab(2)">
+          <span class="exp-tab-company">Guaostudio</span>
+          <span class="exp-tab-date">2020 – 2022</span>
+        </button>
+        <button class="exp-tab" onclick="switchTab(3)">
+          <span class="exp-tab-company">Sideways</span>
+          <span class="exp-tab-date">2019 – 2020</span>
+        </button>
+        <button class="exp-tab" onclick="switchTab(4)">
+          <span class="exp-tab-company">Maniak</span>
+          <span class="exp-tab-date">2017 – 2019</span>
+        </button>
+      </div>
+
+      <!-- PANELS -->
+      <div class="exp-panels">
+
+        <div class="exp-panel active">
+          <div class="exp-panel-role">Manager, Technical Support</div>
+          <div class="exp-panel-meta">
+            <span class="exp-panel-company">Datadog — Hybrid</span>
+            <span class="exp-panel-date">Nov 2024 – Present</span>
+          </div>
+          <ul>
+            <li>Lead and mentor a team of 8 Technical Solutions Engineers across global accounts</li>
+            <li>Own onboarding and mentorship program for new team members</li>
+            <li>Evaluate AI-powered support automation tools to improve ticket resolution efficiency</li>
+            <li>Develop technical training on Datadog's AI observability features for customer AI/ML workloads</li>
+            <li>Drive data-driven analysis of support patterns to identify and action improvement opportunities</li>
+          </ul>
+          <div class="exp-metrics">
+            <span class="exp-metric"><i class="fa-solid fa-users"></i> Team of 8 TSEs</span>
+            <span class="exp-metric"><i class="fa-solid fa-globe"></i> Global accounts</span>
+            <span class="exp-metric"><i class="fa-solid fa-robot"></i> AI tooling evaluation</span>
+          </div>
+        </div>
+
+        <div class="exp-panel">
+          <div class="exp-panel-role">Technical Project Manager</div>
+          <div class="exp-panel-meta">
+            <span class="exp-panel-company">3 Pillar Global — Remote</span>
+            <span class="exp-panel-date">Jan 2022 – Nov 2024</span>
+          </div>
+          <ul>
+            <li>Managed a cross-functional team of 12 engineers (Developers, SREs, QA, Design) delivering scalable web solutions for MotorTrend Group</li>
+            <li>Led a team of 10 developers on platform delivery and integrations for The Telegraph (London)</li>
+            <li>Improved sprint velocity by 25% through Agile process optimization using Jira and Confluence</li>
+            <li>Owned project plans, roadmaps, and scope management from conceptualization through to maintenance</li>
+          </ul>
+          <div class="exp-metrics">
+            <span class="exp-metric"><i class="fa-solid fa-arrow-trend-up"></i> 25% sprint velocity</span>
+            <span class="exp-metric"><i class="fa-solid fa-users"></i> Team of 12 engineers</span>
+            <span class="exp-metric"><i class="fa-brands fa-jira"></i> Jira · Confluence</span>
+          </div>
+        </div>
+
+        <div class="exp-panel">
+          <div class="exp-panel-role">Senior Technical Lead → COO</div>
+          <div class="exp-panel-meta">
+            <span class="exp-panel-company">Guaostudio — Remote</span>
+            <span class="exp-panel-date">May 2020 – Jan 2022</span>
+          </div>
+          <ul>
+            <li>Promoted to COO; led 20 people across Operations, DevOps, Development, Marketing, HR, and QA</li>
+            <li>Rebuilt DevOps infrastructure, improving server reliability by 90% and reducing costs by 50%</li>
+            <li>Identified and implemented automation strategies across departments to reduce manual overhead</li>
+          </ul>
+          <div class="exp-metrics">
+            <span class="exp-metric"><i class="fa-solid fa-users"></i> 20 people, 6 departments</span>
+            <span class="exp-metric"><i class="fa-solid fa-arrow-trend-down"></i> 50% cost reduction</span>
+            <span class="exp-metric"><i class="fa-solid fa-server"></i> 90% uptime improvement</span>
+          </div>
+        </div>
+
+        <div class="exp-panel">
+          <div class="exp-panel-role">Full Stack Developer</div>
+          <div class="exp-panel-meta">
+            <span class="exp-panel-company">Sideways — Remote</span>
+            <span class="exp-panel-date">Apr 2019 – May 2020</span>
+          </div>
+          <ul>
+            <li>Owned technical support area and legacy project maintenance</li>
+            <li>Implemented Help Desk process using Atlassian tooling with defined SLAs, improving client satisfaction by 50%</li>
+            <li>Built WordPress CMS themes with advanced custom fields and blade template engine</li>
+            <li>Ensured ADA/GDPR compliance across client web properties</li>
+          </ul>
+          <div class="exp-metrics">
+            <span class="exp-metric"><i class="fa-solid fa-arrow-trend-up"></i> 50% client satisfaction</span>
+            <span class="exp-metric"><i class="fa-solid fa-shield"></i> ADA/GDPR compliance</span>
+          </div>
+        </div>
+
+        <div class="exp-panel">
+          <div class="exp-panel-role">Full Stack Developer</div>
+          <div class="exp-panel-meta">
+            <span class="exp-panel-company">Maniak — Guadalajara</span>
+            <span class="exp-panel-date">May 2017 – Apr 2019</span>
+          </div>
+          <ul>
+            <li>Led 2 junior developers in support operations and client-facing web development</li>
+            <li>Built landing pages, dashboards, and web apps using WordPress, AWS, and custom scripting</li>
+            <li>Contributed to CI/CD pipelines and AWS infrastructure maintenance via GitHub Actions</li>
+          </ul>
+          <div class="exp-metrics">
+            <span class="exp-metric"><i class="fa-brands fa-aws"></i> AWS</span>
+            <span class="exp-metric"><i class="fa-solid fa-code-branch"></i> CI/CD · GitHub Actions</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- SKILLS -->
+  <div class="section" id="skills">
+    <div class="section-header fade-up">
+      <div class="section-eyebrow">Expertise</div>
+      <div class="section-title">Skills</div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card fade-up">
+        <div class="skill-icon"><i class="fa-solid fa-users"></i></div>
+        <div class="skill-title">Leadership & Management</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Technical Team Leadership (2–20 people)</span>
+          <span class="skill-tag">Remote & Distributed Teams</span>
+          <span class="skill-tag">Agile / Scrum / Kanban</span>
+          <span class="skill-tag">Hiring, Onboarding & Mentorship</span>
+          <span class="skill-tag">Cross-functional Stakeholder Comms</span>
+        </div>
+      </div>
+      <div class="skill-card fade-up">
+        <div class="skill-icon"><i class="fa-solid fa-laptop-code"></i></div>
+        <div class="skill-title">Technical</div>
+        <div class="skill-tags">
+          <span class="skill-tag">JavaScript · React · PHP</span>
+          <span class="skill-tag">AWS · DevOps · CI/CD</span>
+          <span class="skill-tag">WordPress & CMS Development</span>
+          <span class="skill-tag">Data-Driven Decision Making</span>
+          <span class="skill-tag">Process Optimization & Automation</span>
+        </div>
+      </div>
+      <div class="skill-card fade-up">
+        <div class="skill-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+        <div class="skill-title">Tools & Languages</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Datadog · Jira · Confluence</span>
+          <span class="skill-tag">Git / GitHub · Atlassian Suite</span>
+          <span class="skill-tag">Spanish — C2 Native</span>
+          <span class="skill-tag">English — C2 Fluent</span>
+          <span class="skill-tag">German — A1</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- CONTACT -->
+  <div class="section" id="contact">
+    <div class="contact-box fade-up">
+      <h2>Let's work together</h2>
+      <p>I'm open to remote opportunities globally. If you think we'd be a good fit, reach out.</p>
+      <div class="contact-links">
+        <a href="mailto:normars@gmail.com" class="btn btn-white">normars@gmail.com</a>
+        <a href="https://www.linkedin.com/in/normars/" target="_blank" class="btn btn-ghost">LinkedIn <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:11px"></i></a>
+        <a href="Norma-Ruy-Sanchez-CV.pdf" download class="btn btn-ghost">Download CV</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-left">© 2026 Norma Ruy Sanchez</div>
+    <div class="footer-right">
+      <a href="mailto:normars@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/normars/" target="_blank">LinkedIn</a>
+      <a href="Norma-Ruy-Sanchez-CV.pdf" download>CV</a>
+    </div>
+  </footer>
+
+  <script>
+    function switchTab(index) {
+      document.querySelectorAll('.exp-tab').forEach((t, i) => t.classList.toggle('active', i === index));
+      document.querySelectorAll('.exp-panel').forEach((p, i) => p.classList.toggle('active', i === index));
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 60);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
