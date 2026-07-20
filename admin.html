@@ -431,6 +431,7 @@
     .fit-support  { background: rgba(96,165,250,0.1);  color: #60a5fa; border: 1px solid rgba(96,165,250,0.2); }
     .fit-pm       { background: rgba(167,139,250,0.1); color: #a78bfa; border: 1px solid rgba(167,139,250,0.2); }
     .fit-cs       { background: rgba(251,191,36,0.1);  color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+    .fit-tpm      { background: rgba(167,139,250,0.1); color: #a78bfa; border: 1px solid rgba(167,139,250,0.2); }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 700px) {
@@ -495,7 +496,7 @@
       <div class="live-header">
         <div class="live-dot"></div>
         <div class="live-badge">Live Openings</div>
-        <div class="live-date">Scanned July 2026</div>
+        <div class="live-date">Scanned 19 July 2026</div>
       </div>
       <div class="section-title" style="margin-bottom:8px">Roles Open Right Now</div>
       <p class="section-note">Matched to your profile from target companies. Apply to these first.</p>
@@ -505,8 +506,26 @@
             <tr><th>#</th><th>Company</th><th>Role</th><th>Location</th><th class="role-fit">Fit</th><th>Status</th><th>Apply</th></tr>
           </thead>
           <tbody>
-            <tr data-id="live-synthesia-cs">
+            <tr data-id="live-gitlab-support-emea">
               <td>1</td>
+              <td>GitLab</td>
+              <td style="font-weight:600">Director, Support Engineering (EMEA)</td>
+              <td style="color:var(--muted);font-size:13px">Remote · UK</td>
+              <td><span class="fit-tag fit-support">Support</span></td>
+              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><a class="apply-btn" href="https://job-boards.greenhouse.io/gitlab/jobs/8629005002" target="_blank">Apply ↗</a></td>
+            </tr>
+            <tr data-id="live-synthesia-csm-spanish">
+              <td>2</td>
+              <td>Synthesia</td>
+              <td style="font-weight:600">Strategic CSM — Spanish Speaking</td>
+              <td style="color:var(--muted);font-size:13px">Europe · Remote</td>
+              <td><span class="fit-tag fit-cs">Cust. Success</span></td>
+              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><a class="apply-btn" href="https://jobs.ashbyhq.com/synthesia/b8d27ddc-dd45-452e-8d24-7e44c17d33c8" target="_blank">Apply ↗</a></td>
+            </tr>
+            <tr data-id="live-synthesia-cs">
+              <td>3</td>
               <td>Synthesia</td>
               <td style="font-weight:600">Manager, Scaled Customer Success</td>
               <td style="color:var(--muted);font-size:13px">London · Hybrid</td>
@@ -515,7 +534,7 @@
               <td><a class="apply-btn" href="https://jobs.ashbyhq.com/synthesia/d4a59223-9669-48d5-ad5d-91a9e71370d0" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="live-synthesia-pm-enterprise">
-              <td>2</td>
+              <td>4</td>
               <td>Synthesia</td>
               <td style="font-weight:600">Product Manager, Enterprise</td>
               <td style="color:var(--muted);font-size:13px">London · Hybrid</td>
@@ -524,7 +543,7 @@
               <td><a class="apply-btn" href="https://jobs.ashbyhq.com/synthesia/31e1dca3-74fd-4f74-8f40-5bb19f4034bb" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="live-paddle-spm-dashboard">
-              <td>3</td>
+              <td>5</td>
               <td>Paddle</td>
               <td style="font-weight:600">Senior Product Manager, Dashboard</td>
               <td style="color:var(--muted);font-size:13px">UK · Remote</td>
@@ -533,7 +552,7 @@
               <td><a class="apply-btn" href="https://jobs.ashbyhq.com/paddle/bf1b5606-58c2-46ce-8638-ed8b946fb7f6" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="live-paddle-spm-retain">
-              <td>4</td>
+              <td>6</td>
               <td>Paddle</td>
               <td style="font-weight:600">Senior Product Manager, Retain</td>
               <td style="color:var(--muted);font-size:13px">UK · Remote</td>
@@ -542,7 +561,7 @@
               <td><a class="apply-btn" href="https://jobs.ashbyhq.com/paddle/f112f17b-c1e5-41f6-ab8b-a0ceef0dde59" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="live-paddle-staff-pm">
-              <td>5</td>
+              <td>7</td>
               <td>Paddle</td>
               <td style="font-weight:600">Staff Product Manager</td>
               <td style="color:var(--muted);font-size:13px">London · Remote</td>
@@ -551,13 +570,49 @@
               <td><a class="apply-btn" href="https://jobs.ashbyhq.com/paddle/70437d49-e165-4380-b5f0-5bddbac94a0f" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="live-gocardless-spm">
-              <td>6</td>
+              <td>8</td>
               <td>GoCardless</td>
               <td style="font-weight:600">Senior Product Manager</td>
               <td style="color:var(--muted);font-size:13px">London</td>
               <td><span class="fit-tag fit-pm">AI PM</span></td>
               <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
               <td><a class="apply-btn" href="https://job-boards.greenhouse.io/gocardless/jobs/8064518" target="_blank">Apply ↗</a></td>
+            </tr>
+            <tr data-id="live-intercom-csm-ent">
+              <td>9</td>
+              <td>Intercom</td>
+              <td style="font-weight:600">Principal CSM, Enterprise</td>
+              <td style="color:var(--muted);font-size:13px">London</td>
+              <td><span class="fit-tag fit-cs">Cust. Success</span></td>
+              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><a class="apply-btn" href="https://job-boards.greenhouse.io/intercom/jobs/7994422" target="_blank">Apply ↗</a></td>
+            </tr>
+            <tr data-id="live-intercom-tpm">
+              <td>10</td>
+              <td>Intercom</td>
+              <td style="font-weight:600">Technology Enablement PM</td>
+              <td style="color:var(--muted);font-size:13px">London / Dublin</td>
+              <td><span class="fit-tag fit-tpm">TPM</span></td>
+              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><a class="apply-btn" href="https://job-boards.greenhouse.io/intercom/jobs/8053727" target="_blank">Apply ↗</a></td>
+            </tr>
+            <tr data-id="live-gitlab-csm-uk">
+              <td>11</td>
+              <td>GitLab</td>
+              <td style="font-weight:600">Customer Success Manager</td>
+              <td style="color:var(--muted);font-size:13px">Remote · UK</td>
+              <td><span class="fit-tag fit-cs">Cust. Success</span></td>
+              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><a class="apply-btn" href="https://job-boards.greenhouse.io/gitlab/jobs/8618112002" target="_blank">Apply ↗</a></td>
+            </tr>
+            <tr data-id="live-grafana-spm-uk">
+              <td>12</td>
+              <td>Grafana Labs</td>
+              <td style="font-weight:600">Sr PM, Infrastructure Observability</td>
+              <td style="color:var(--muted);font-size:13px">Remote · UK</td>
+              <td><span class="fit-tag fit-pm">AI PM</span></td>
+              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><a class="apply-btn" href="https://job-boards.greenhouse.io/grafanalabs/jobs/6008083004" target="_blank">Apply ↗</a></td>
             </tr>
           </tbody>
         </table>
@@ -573,16 +628,24 @@
             <tr><th>#</th><th>Company</th><th>Visa</th><th>Why them</th><th>Status</th><th>Apply</th></tr>
           </thead>
           <tbody>
-            <tr data-id="grafana">
+            <tr data-id="gitlab-support">
               <td>1</td>
+              <td>GitLab</td>
+              <td><span class="visa visa-likely">Likely</span></td>
+              <td><strong style="color:var(--text)">Director, Support (EMEA) open now — Remote UK.</strong> All-remote US company = SVV-safe. Top priority application.</td>
+              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><a class="apply-btn" href="https://job-boards.greenhouse.io/gitlab/jobs/8629005002" target="_blank">Apply ↗</a></td>
+            </tr>
+            <tr data-id="grafana">
+              <td>2</td>
               <td>Grafana Labs</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>Remote-first, observability product closest to Datadog. UK-registered. You know this space cold.</td>
               <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
-              <td><a class="apply-btn" href="https://grafana.com/about/careers/" target="_blank">Apply ↗</a></td>
+              <td><a class="apply-btn" href="https://job-boards.greenhouse.io/grafanalabs" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="elastic">
-              <td>2</td>
+              <td>3</td>
               <td>Elastic</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>Remote-first, distributed observability/search. Similar customer profile to Datadog. Known sponsor.</td>
@@ -590,7 +653,7 @@
               <td><a class="apply-btn" href="https://www.elastic.co/about/careers" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="incident">
-              <td>3</td>
+              <td>4</td>
               <td>incident.io</td>
               <td><span class="visa visa-maybe">Maybe</span></td>
               <td>London startup growing fast. Support is central to product credibility. Small team = high-impact role.</td>
@@ -598,7 +661,7 @@
               <td><a class="apply-btn" href="https://incident.io/careers" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="intercom">
-              <td>4</td>
+              <td>5</td>
               <td>Intercom</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>Customer messaging platform — support is core to their identity. Strong UK presence, known sponsor.</td>
@@ -606,7 +669,7 @@
               <td><a class="apply-btn" href="https://www.intercom.com/careers" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="paddle">
-              <td>5</td>
+              <td>6</td>
               <td>Paddle</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>UK-based SaaS payments, remote-friendly. Technical support is high-stakes here. Scaling rapidly.</td>
@@ -614,7 +677,7 @@
               <td><a class="apply-btn" href="https://www.paddle.com/careers" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="wise">
-              <td>6</td>
+              <td>7</td>
               <td>Wise</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>London HQ, remote-friendly, known Skilled Worker sponsor. Global scale, strong data culture.</td>
@@ -622,7 +685,7 @@
               <td><a class="apply-btn" href="https://wise.com/gb/careers" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="gocardless">
-              <td>7</td>
+              <td>8</td>
               <td>GoCardless</td>
               <td><span class="visa visa-likely">Likely</span></td>
               <td>London fintech, remote-friendly. Payments infra with demanding technical clients. SLA background fits.</td>
@@ -731,19 +794,73 @@
             </tr>
             <tr data-id="onfido">
               <td>4</td>
-              <td>Onfido</td>
+              <td>Entrust <span style="color:var(--muted2);font-size:11px;font-weight:400">(fmr Onfido)</span></td>
               <td><span class="visa visa-likely">Likely</span></td>
-              <td>London AI identity verification. AI/ML is core to their platform. Remote-friendly, known sponsor.</td>
+              <td>Onfido acquired by Entrust in 2024. AI identity verification now under Entrust. Check Entrust careers for AI/ML PM roles.</td>
               <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
-              <td><a class="apply-btn" href="https://onfido.com/careers/" target="_blank">Apply ↗</a></td>
+              <td><a class="apply-btn" href="https://www.entrust.com/careers/" target="_blank">Apply ↗</a></td>
             </tr>
             <tr data-id="featurespace">
               <td>5</td>
-              <td>Featurespace</td>
+              <td>Visa <span style="color:var(--muted2);font-size:11px;font-weight:400">(fmr Featurespace)</span></td>
               <td><span class="visa visa-maybe">Maybe</span></td>
-              <td>Cambridge AI fraud detection. Technical PM working closely with ML teams. Your COO breadth is an asset here.</td>
+              <td>Featurespace acquired by Visa in 2024. AI fraud detection tech now under Visa. Check Visa UK careers for AI/ML PM roles.</td>
               <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
-              <td><a class="apply-btn" href="https://www.featurespace.com/careers/" target="_blank">Apply ↗</a></td>
+              <td><a class="apply-btn" href="https://www.visa.co.uk/careers/" target="_blank">Apply ↗</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── CUSTOMER SUCCESS ── -->
+      <div class="section-eyebrow">Role Type 4</div>
+      <div class="section-title">Head of Customer Success / Director CS</div>
+      <p class="section-note">Leverage your team management depth + technical background. Emphasise retention metrics, CS ops, and cross-functional collaboration with Product and Support.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>#</th><th>Company</th><th>Visa</th><th>Why them</th><th>Status</th><th>Apply</th></tr>
+          </thead>
+          <tbody>
+            <tr data-id="intercom-cs">
+              <td>1</td>
+              <td>Intercom</td>
+              <td><span class="visa visa-likely">Likely</span></td>
+              <td>Customer messaging platform — CS is their core identity. London HQ, known sponsor. Principal CSM Enterprise open now.</td>
+              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><a class="apply-btn" href="https://job-boards.greenhouse.io/intercom/jobs/7994422" target="_blank">Apply ↗</a></td>
+            </tr>
+            <tr data-id="pleo-cs">
+              <td>2</td>
+              <td>Pleo</td>
+              <td><span class="visa visa-likely">Likely</span></td>
+              <td>UK/EU fintech, Director CS open in London. Fast-growing spend management platform. CS Manager UK&amp;I also open.</td>
+              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><a class="apply-btn" href="https://jobs.ashbyhq.com/pleo/7f9bad69-94b8-4aa1-916a-1d810872489f" target="_blank">Apply ↗</a></td>
+            </tr>
+            <tr data-id="synthesia-cs">
+              <td>3</td>
+              <td>Synthesia</td>
+              <td><span class="visa visa-likely">Likely</span></td>
+              <td>Strategic CSM Spanish Speaking open (Europe Remote). Native Spanish is a hard filter — differentiator for you.</td>
+              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><a class="apply-btn" href="https://jobs.ashbyhq.com/synthesia/b8d27ddc-dd45-452e-8d24-7e44c17d33c8" target="_blank">Apply ↗</a></td>
+            </tr>
+            <tr data-id="hubspot-cs">
+              <td>4</td>
+              <td>HubSpot</td>
+              <td><span class="visa visa-likely">Likely</span></td>
+              <td>CRM platform, strong UK/EMEA presence. CS roles at scale. Known visa sponsor, remote-friendly.</td>
+              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><a class="apply-btn" href="https://www.hubspot.com/careers" target="_blank">Apply ↗</a></td>
+            </tr>
+            <tr data-id="gitlab-cs">
+              <td>5</td>
+              <td>GitLab</td>
+              <td><span class="visa visa-maybe">Maybe</span></td>
+              <td>All-remote = SVV-friendly. CSM (Remote UK) open now + Director Support EMEA. Multiple UK-eligible roles.</td>
+              <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+              <td><a class="apply-btn" href="https://job-boards.greenhouse.io/gitlab/jobs/8618112002" target="_blank">Apply ↗</a></td>
             </tr>
           </tbody>
         </table>
