@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Job Search Tracker</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #fafafa;
+      color: #1a1a1a;
+      font-size: 10.5pt;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ── PASSWORD GATE ── */
+    #gate {
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    #gate h2 {
+      font-size: 13pt;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    #gate p {
+      color: #888;
+      font-size: 9.5pt;
+      margin-bottom: 28px;
+    }
+    .gate-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 280px;
+    }
+    .gate-form input[type="password"] {
+      font-family: inherit;
+      font-size: 11pt;
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      outline: none;
+      letter-spacing: 3px;
+      text-align: center;
+    }
+    .gate-form input[type="password"]:focus { border-color: #1a1a1a; }
+    .gate-form button {
+      font-family: inherit;
+      font-size: 10.5pt;
+      font-weight: bold;
+      padding: 10px;
+      background: #1a1a1a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+    }
+    .gate-form button:hover { background: #333; }
+    .gate-error {
+      color: #dc2626;
+      font-size: 9pt;
+      text-align: center;
+      min-height: 16px;
+    }
+
+    /* ── MAIN CONTENT ── */
+    #content {
+      display: none;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 50px 40px;
+    }
+
+    @media print {
+      #gate { display: none !important; }
+      #content { display: block !important; }
+      .no-print { display: none; }
+      body { background: #fff; }
+    }
+
+    /* HEADER */
+    h1 {
+      font-size: 18pt;
+      text-align: center;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #888;
+      font-size: 10pt;
+      font-style: italic;
+      margin-bottom: 32px;
+    }
+
+    /* STATS BAR */
+    .stats-bar {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+    }
+    .stat-pill {
+      border: 1px solid #e5e7eb;
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-size: 10pt;
+      color: #555;
+      background: #fff;
+    }
+    .stat-pill strong { color: #1a1a1a; }
+
+    /* LEGEND */
+    .legend {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      font-size: 9.5pt;
+    }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .dot-todo      { background: #d1d5db; }
+    .dot-applied   { background: #60a5fa; }
+    .dot-interview { background: #f59e0b; }
+    .dot-offer     { background: #34d399; }
+    .dot-pass      { background: #f87171; }
+
+    /* SECTION */
+    h2 {
+      font-size: 9pt;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 36px;
+      margin-bottom: 4px;
+    }
+    hr { border: none; border-top: 1px solid #1a1a1a; margin-bottom: 16px; }
+    .section-note {
+      font-size: 9.5pt;
+      color: #888;
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+
+    /* TABLE */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 9.5pt; }
+    thead th {
+      text-align: left;
+      font-size: 8.5pt;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #aaa;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 6px 10px;
+      font-weight: normal;
+    }
+    tbody tr { border-bottom: 1px solid #f3f4f6; transition: background 0.1s; }
+    tbody tr:hover { background: #f9fafb; }
+    td { padding: 10px 10px; vertical-align: middle; }
+    td:nth-child(1) { width: 28px; text-align: center; color: #aaa; }
+    td:nth-child(2) { width: 150px; font-weight: bold; }
+    td:nth-child(3) { width: 76px; }
+    td:nth-child(4) { color: #444; }
+    td:nth-child(5) { width: 100px; }
+    td:nth-child(6) { width: 80px; text-align: center; }
+
+    select {
+      font-family: inherit;
+      font-size: 9pt;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      padding: 3px 6px;
+      color: #1a1a1a;
+      background: #fff;
+      cursor: pointer;
+      width: 100%;
+    }
+    select:focus { outline: 1px solid #555; }
+
+    tr.status-applied    { background: #eff6ff; }
+    tr.status-interview  { background: #fffbeb; }
+    tr.status-offer      { background: #ecfdf5; }
+    tr.status-pass       { background: #fef2f2; opacity: 0.55; }
+
+    .visa { font-size: 8.5pt; padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
+    .visa-likely { background: #dcfce7; color: #166534; }
+    .visa-maybe  { background: #fef9c3; color: #713f12; }
+
+    .apply-btn {
+      display: inline-block;
+      font-size: 8.5pt;
+      font-weight: bold;
+      padding: 4px 12px;
+      border: 1px solid #1a1a1a;
+      border-radius: 4px;
+      text-decoration: none;
+      color: #1a1a1a;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .apply-btn:hover { background: #1a1a1a; color: #fff; }
+
+    /* PLATFORMS */
+    .platform-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 4px;
+    }
+    .platform-card { border: 1px solid #e5e7eb; border-radius: 6px; padding: 14px 16px; background: #fff; }
+    .platform-name { font-weight: bold; font-size: 10pt; margin-bottom: 4px; }
+    .platform-desc { font-size: 9.5pt; color: #555; }
+    .platform-desc a { color: #1a1a1a; }
+
+    .cadence-box {
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 18px 20px;
+      margin-top: 16px;
+      background: #fff;
+      font-size: 9.5pt;
+    }
+    .cadence-box h3 { font-size: 10pt; margin-bottom: 10px; }
+    .cadence-box ul { padding-left: 18px; color: #444; }
+    .cadence-box ul li { margin-bottom: 4px; }
+
+    .logout-btn {
+      display: block;
+      margin: 40px auto 0;
+      padding: 8px 22px;
+      font-family: inherit;
+      font-size: 9.5pt;
+      color: #aaa;
+      background: none;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .logout-btn:hover { color: #1a1a1a; border-color: #1a1a1a; }
+  </style>
+</head>
+<body>
+
+  <!-- PASSWORD GATE -->
+  <div id="gate">
+    <h2>Norma Ruy Sanchez</h2>
+    <p>Job Search Tracker — Private</p>
+    <div class="gate-form">
+      <input type="password" id="pwd-input" placeholder="Password" autofocus>
+      <div class="gate-error" id="gate-error"></div>
+      <button onclick="checkPassword()">Enter</button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div id="content">
+
+    <h1>Job Search Tracker</h1>
+    <div class="subtitle">Norma Ruy Sanchez · UK Remote Roles · Updated July 2026</div>
+
+    <div class="stats-bar no-print">
+      <div class="stat-pill">To apply: <strong id="count-todo">—</strong></div>
+      <div class="stat-pill">Applied: <strong id="count-applied">—</strong></div>
+      <div class="stat-pill">Interviews: <strong id="count-interview">—</strong></div>
+      <div class="stat-pill">Offers: <strong id="count-offer">—</strong></div>
+    </div>
+
+    <div class="legend no-print">
+      <div class="legend-item"><div class="dot dot-todo"></div> To apply</div>
+      <div class="legend-item"><div class="dot dot-applied"></div> Applied</div>
+      <div class="legend-item"><div class="dot dot-interview"></div> Interview</div>
+      <div class="legend-item"><div class="dot dot-offer"></div> Offer</div>
+      <div class="legend-item"><div class="dot dot-pass"></div> Pass</div>
+    </div>
+
+    <!-- HEAD OF SUPPORT -->
+    <h2>Head of Support / Technical Support Manager</h2>
+    <hr>
+    <p class="section-note">Strongest fit — mirrors your current role at Datadog. Lead with team size, AI tooling, and data-driven ops.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Company</th><th>Visa</th><th>Why them</th><th>Status</th><th>Apply</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-id="grafana">
+          <td>1</td>
+          <td>Grafana Labs</td>
+          <td><span class="visa visa-likely">Likely</span></td>
+          <td>Remote-first, observability product closest to Datadog. UK-registered. You know this space cold.</td>
+          <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+          <td><a class="apply-btn" href="https://grafana.com/about/careers/" target="_blank">Apply →</a></td>
+        </tr>
+        <tr data-id="elastic">
+          <td>2</td>
+          <td>Elastic</td>
+          <td><span class="visa visa-likely">Likely</span></td>
+          <td>Remote-first, distributed observability/search. Similar customer profile to Datadog. Known sponsor.</td>
+          <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+          <td><a class="apply-btn" href="https://www.elastic.co/about/careers" target="_blank">Apply →</a></td>
+        </tr>
+        <tr data-id="incident">
+          <td>3</td>
+          <td>incident.io</td>
+          <td><span class="visa visa-maybe">Maybe</span></td>
+          <td>London startup growing fast. Support is central to product credibility. Small team = high-impact role.</td>
+          <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+          <td><a class="apply-btn" href="https://incident.io/careers" target="_blank">Apply →</a></td>
+        </tr>
+        <tr data-id="intercom">
+          <td>4</td>
+          <td>Intercom</td>
+          <td><span class="visa visa-likely">Likely</span></td>
+          <td>Customer messaging platform — support is core to their identity. Strong UK presence, known sponsor.</td>
+          <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+          <td><a class="apply-btn" href="https://www.intercom.com/careers" target="_blank">Apply →</a></td>
+        </tr>
+        <tr data-id="paddle">
+          <td>5</td>
+          <td>Paddle</td>
+          <td><span class="visa visa-likely">Likely</span></td>
+          <td>UK-based SaaS payments, remote-friendly. Technical support is high-stakes here. Scaling rapidly.</td>
+          <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+          <td><a class="apply-btn" href="https://www.paddle.com/careers" target="_blank">Apply →</a></td>
+        </tr>
+        <tr data-id="wise">
+          <td>6</td>
+          <td>Wise</td>
+          <td><span class="visa visa-likely">Likely</span></td>
+          <td>London HQ, remote-friendly, known Skilled Worker sponsor. Global scale, strong data culture.</td>
+          <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+          <td><a class="apply-btn" href="https://wise.com/gb/careers" target="_blank">Apply →</a></td>
+        </tr>
+        <tr data-id="gocardless">
+          <td>7</td>
+          <td>GoCardless</td>
+          <td><span class="visa visa-likely">Likely</span></td>
+          <td>London fintech, remote-friendly. Payments infra with demanding technical clients. Your SLA background fits.</td>
+          <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+          <td><a class="apply-btn" href="https://gocardless.com/about/careers/" target="_blank">Apply →</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- TPM -->
+    <h2>Technical Program Manager / Technical Project Manager</h2>
+    <hr>
+    <p class="section-note">Lead with The Telegraph and MotorTrend delivery. Emphasise Agile, cross-functional teams, and measurable velocity gains.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Company</th><th>Visa</th><th>Why them</th><th>Status</th><th>Apply</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-id="telegraph">
+          <td>1</td>
+          <td>The Telegraph</td>
+          <td><span class="visa visa-likely">Likely</span></td>
+          <td><strong>You led their delivery team at 3 Pillar.</strong> Direct prior relationship. Apply and mention the engagement by name.</td>
+          <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+          <td><a class="apply-btn" href="https://www.telegraph.co.uk/about-us/careers/" target="_blank">Apply →</a></td>
+        </tr>
+        <tr data-id="guardian">
+          <td>2</td>
+          <td>Guardian Media</td>
+          <td><span class="visa visa-likely">Likely</span></td>
+          <td>London digital media, similar profile to The Telegraph. Large engineering org, Agile at scale.</td>
+          <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+          <td><a class="apply-btn" href="https://workforus.theguardian.com/" target="_blank">Apply →</a></td>
+        </tr>
+        <tr data-id="monzo">
+          <td>3</td>
+          <td>Monzo</td>
+          <td><span class="visa visa-likely">Likely</span></td>
+          <td>UK neobank, remote-friendly, strong engineering culture. Complex cross-functional programmes. Known sponsor.</td>
+          <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+          <td><a class="apply-btn" href="https://monzo.com/careers/" target="_blank">Apply →</a></td>
+        </tr>
+        <tr data-id="deliveroo">
+          <td>4</td>
+          <td>Deliveroo</td>
+          <td><span class="visa visa-likely">Likely</span></td>
+          <td>London tech scale-up, large engineering org, known sponsor. High-complexity logistics platform.</td>
+          <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+          <td><a class="apply-btn" href="https://careers.deliveroo.co.uk/" target="_blank">Apply →</a></td>
+        </tr>
+        <tr data-id="starling">
+          <td>5</td>
+          <td>Starling Bank</td>
+          <td><span class="visa visa-likely">Likely</span></td>
+          <td>UK digital bank, remote-friendly, growing fast. Tech-first culture. TPM roles spanning engineering and compliance.</td>
+          <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+          <td><a class="apply-btn" href="https://www.starlingbank.com/careers/" target="_blank">Apply →</a></td>
+        </tr>
+        <tr data-id="asos">
+          <td>6</td>
+          <td>ASOS</td>
+          <td><span class="visa visa-likely">Likely</span></td>
+          <td>UK e-commerce, large tech org, known sponsor. Engineering programmes at scale.</td>
+          <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+          <td><a class="apply-btn" href="https://careers.asos.com/" target="_blank">Apply →</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- AI PM -->
+    <h2>AI / ML Product Manager</h2>
+    <hr>
+    <p class="section-note">Position as a technical operator moving into AI PM — not a switcher. Lead with Datadog AI tooling evaluation and observability for ML workloads.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Company</th><th>Visa</th><th>Why them</th><th>Status</th><th>Apply</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-id="polyai">
+          <td>1</td>
+          <td>PolyAI</td>
+          <td><span class="visa visa-likely">Likely</span></td>
+          <td>London AI for customer service. <strong>You understand their end user better than most PMs they'll interview.</strong></td>
+          <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+          <td><a class="apply-btn" href="https://poly.ai/careers/" target="_blank">Apply →</a></td>
+        </tr>
+        <tr data-id="synthesia">
+          <td>2</td>
+          <td>Synthesia</td>
+          <td><span class="visa visa-likely">Likely</span></td>
+          <td>London AI video platform, scaling fast. Technical PM at the intersection of AI and real-world deployment.</td>
+          <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+          <td><a class="apply-btn" href="https://www.synthesia.io/careers" target="_blank">Apply →</a></td>
+        </tr>
+        <tr data-id="faculty">
+          <td>3</td>
+          <td>Faculty AI</td>
+          <td><span class="visa visa-likely">Likely</span></td>
+          <td>London AI products. PM roles bridging technical teams and enterprise clients — your stakeholder background is relevant.</td>
+          <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+          <td><a class="apply-btn" href="https://faculty.ai/careers/" target="_blank">Apply →</a></td>
+        </tr>
+        <tr data-id="onfido">
+          <td>4</td>
+          <td>Onfido</td>
+          <td><span class="visa visa-likely">Likely</span></td>
+          <td>London AI identity verification. AI/ML is core to their platform. Remote-friendly, known sponsor.</td>
+          <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+          <td><a class="apply-btn" href="https://onfido.com/careers/" target="_blank">Apply →</a></td>
+        </tr>
+        <tr data-id="featurespace">
+          <td>5</td>
+          <td>Featurespace</td>
+          <td><span class="visa visa-maybe">Maybe</span></td>
+          <td>Cambridge AI fraud detection. Technical PM working closely with ML teams. Your COO breadth is an asset here.</td>
+          <td><select onchange="updateStatus(this)"><option value="">To apply</option><option value="applied">Applied</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="pass">Pass</option></select></td>
+          <td><a class="apply-btn" href="https://www.featurespace.com/careers/" target="_blank">Apply →</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- PLATFORMS -->
+    <h2 style="margin-top:48px">Where to Search</h2>
+    <hr>
+    <div class="platform-grid">
+      <div class="platform-card">
+        <div class="platform-name">LinkedIn</div>
+        <div class="platform-desc">Primary channel. Set location to "United Kingdom", toggle Remote. Filter 50–5,000 employees. <a href="https://www.linkedin.com/jobs/" target="_blank">linkedin.com/jobs →</a></div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-name">Otta / Welcome to the Jungle</div>
+        <div class="platform-desc">Best UK tech job board. Curated, no noise. Strong on startups and scale-ups that sponsor. <a href="https://otta.com" target="_blank">otta.com →</a></div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-name">Cord</div>
+        <div class="platform-desc">UK-focused with direct messaging to hiring managers. Good for TPM and leadership roles. <a href="https://cord.co" target="_blank">cord.co →</a></div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-name">UK Visa Sponsor List</div>
+        <div class="platform-desc">Official GOV.UK list of licensed Skilled Worker sponsors. Cross-check any company before applying. <a href="https://www.gov.uk/government/publications/register-of-licensed-sponsors-workers" target="_blank">gov.uk →</a></div>
+      </div>
+    </div>
+
+    <div class="cadence-box">
+      <h3>Weekly Cadence</h3>
+      <ul>
+        <li><strong>Monday:</strong> Review new postings on Otta + LinkedIn. Add any new targets to this tracker.</li>
+        <li><strong>Tuesday–Wednesday:</strong> Write and send 3–5 tailored applications. Prioritise Tier 1 targets first.</li>
+        <li><strong>Thursday:</strong> Follow up on applications sent 2+ weeks ago. Connect with hiring managers on LinkedIn.</li>
+        <li><strong>Friday:</strong> Update tracker statuses, note any feedback, plan next week.</li>
+      </ul>
+    </div>
+
+    <button class="logout-btn no-print" onclick="logout()">Log out</button>
+
+  </div><!-- /content -->
+
+  <script>
+    // ── Change this to your preferred password ──
+    const PASSWORD = 'norma2026';
+    const SESSION_KEY = 'admin_authed';
+    const STORAGE_KEY = 'job_tracker_statuses';
+
+    // Auto-login if already authenticated this session
+    if (sessionStorage.getItem(SESSION_KEY) === '1') {
+      showContent();
+    }
+
+    document.getElementById('pwd-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') checkPassword();
+    });
+
+    function checkPassword() {
+      const val = document.getElementById('pwd-input').value;
+      if (val === PASSWORD) {
+        sessionStorage.setItem(SESSION_KEY, '1');
+        showContent();
+      } else {
+        document.getElementById('gate-error').textContent = 'Incorrect password.';
+        document.getElementById('pwd-input').value = '';
+        document.getElementById('pwd-input').focus();
+      }
+    }
+
+    function showContent() {
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('content').style.display = 'block';
+      loadStatuses();
+      updateCounts();
+    }
+
+    function logout() {
+      sessionStorage.removeItem(SESSION_KEY);
+      location.reload();
+    }
+
+    // ── Status tracking (persisted in localStorage) ──
+    function updateStatus(sel) {
+      const row = sel.closest('tr');
+      const id  = row.dataset.id;
+      const val = sel.value;
+      row.className = val ? 'status-' + val : '';
+      saveStatuses();
+      updateCounts();
+    }
+
+    function saveStatuses() {
+      const data = {};
+      document.querySelectorAll('tbody tr[data-id]').forEach(row => {
+        data[row.dataset.id] = row.querySelector('select').value;
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function loadStatuses() {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      document.querySelectorAll('tbody tr[data-id]').forEach(row => {
+        const val = saved[row.dataset.id] || '';
+        row.querySelector('select').value = val;
+        row.className = val ? 'status-' + val : '';
+      });
+    }
+
+    function updateCounts() {
+      const counts = { todo: 0, applied: 0, interview: 0, offer: 0 };
+      document.querySelectorAll('tbody tr[data-id]').forEach(row => {
+        const val = row.querySelector('select').value;
+        if (!val)                counts.todo++;
+        else if (val === 'applied')   counts.applied++;
+        else if (val === 'interview') counts.interview++;
+        else if (val === 'offer')     counts.offer++;
+      });
+      document.getElementById('count-todo').textContent      = counts.todo;
+      document.getElementById('count-applied').textContent   = counts.applied;
+      document.getElementById('count-interview').textContent = counts.interview;
+      document.getElementById('count-offer').textContent     = counts.offer;
+    }
+  </script>
+
+</body>
+</html>
