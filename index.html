@@ -538,6 +538,26 @@
     }
     .fade-up.visible { opacity: 1; transform: translateY(0); }
 
+    /* ── PRINT ── */
+    @media print {
+      body { background: #fff; color: #000; }
+      body::before, .glow-top { display: none; }
+      nav, footer { display: none; }
+      .hero-actions { display: none; }
+      .btn, .nav-btn { display: none; }
+      .section { padding: 40px 20px; }
+      .exp-tab, .exp-panel, .skill-card, .contact-box { border-color: #ddd !important; }
+      .exp-tab.active, .exp-panel.active { color: #000; }
+      .exp-panel ul li, .hero-sub, .section-eyebrow, .section-title,
+      .skill-title, .skill-tag, .stat-num, .stat-label,
+      .exp-panel-role, .exp-panel-company, .exp-panel-date { color: #000 !important; -webkit-text-fill-color: #000 !important; }
+      h1 { -webkit-text-fill-color: #000 !important; background: none; color: #000; }
+      .exp-panels { display: block; }
+      .exp-panel { display: block !important; page-break-inside: avoid; }
+      .exp-tab { display: none; }
+      .exp-layout { grid-template-columns: 1fr; border: none; }
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       .experience-grid { grid-template-columns: 1fr 1fr; }
@@ -575,7 +595,7 @@
     </ul>
     <div class="nav-cta">
       <a href="https://www.linkedin.com/in/normars/" target="_blank" class="nav-btn">LinkedIn <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:11px"></i></a>
-      <a href="Norma-Ruy-Sanchez-CV.pdf" download class="nav-btn nav-btn-dark">Download CV</a>
+      <a href="#" onclick="window.print(); return false;" class="nav-btn nav-btn-dark">Download CV</a>
     </div>
   </nav>
 
@@ -594,7 +614,7 @@
     </p>
     <div class="hero-actions">
       <a href="#contact" class="btn btn-white">Get in touch</a>
-      <a href="Norma-Ruy-Sanchez-CV.pdf" download class="btn btn-ghost">Download CV</a>
+      <a href="#" onclick="window.print(); return false;" class="btn btn-ghost">Download CV</a>
       <a href="https://www.linkedin.com/in/normars/" target="_blank" class="btn btn-ghost">LinkedIn <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:11px"></i></a>
     </div>
     <div class="hero-stats">
@@ -815,7 +835,7 @@
       <div class="contact-links">
         <a href="mailto:normars@gmail.com" class="btn btn-white">normars@gmail.com</a>
         <a href="https://www.linkedin.com/in/normars/" target="_blank" class="btn btn-ghost">LinkedIn <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:11px"></i></a>
-        <a href="Norma-Ruy-Sanchez-CV.pdf" download class="btn btn-ghost">Download CV</a>
+        <a href="#" onclick="window.print(); return false;" class="btn btn-ghost">Download CV</a>
       </div>
     </div>
   </div>
@@ -826,7 +846,7 @@
     <div class="footer-right">
       <a href="mailto:normars@gmail.com">Email</a>
       <a href="https://www.linkedin.com/in/normars/" target="_blank">LinkedIn</a>
-      <a href="Norma-Ruy-Sanchez-CV.pdf" download>CV</a>
+      <a href="#" onclick="window.print(); return false;">CV</a>
     </div>
   </footer>
 
