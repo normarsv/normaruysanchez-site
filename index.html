@@ -403,7 +403,7 @@
     /* ── SKILLS ── */
     .skills-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       border: 1px solid var(--border);
       border-radius: 10px;
       overflow: hidden;
@@ -543,9 +543,10 @@
       .experience-grid { grid-template-columns: 1fr 1fr; }
       .exp-card:nth-child(3n) { border-right: 1px solid var(--border); }
       .exp-card:nth-child(2n) { border-right: none; }
-      .skills-grid { grid-template-columns: 1fr; }
-      .skill-card { border-right: none; border-bottom: 1px solid var(--border); }
-      .skill-card:last-child { border-bottom: none; }
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+      .skill-card { border-bottom: 1px solid var(--border); }
+      .skill-card:nth-child(2n) { border-right: none; }
+      .skill-card:nth-last-child(-n+2) { border-bottom: none; }
       .hero-stats { flex-direction: column; }
       .stat { border-right: none; border-bottom: 1px solid var(--border); }
       .stat:last-child { border-bottom: none; }
@@ -782,10 +783,20 @@
       </div>
       <div class="skill-card fade-up">
         <div class="skill-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
-        <div class="skill-title">Tools & Languages</div>
+        <div class="skill-title">Tools</div>
         <div class="skill-tags">
           <span class="skill-tag">Datadog · Jira · Confluence</span>
           <span class="skill-tag">Git / GitHub · Atlassian Suite</span>
+          <span class="skill-tag">AI Tooling Evaluation</span>
+          <span class="skill-tag">LLM Workflows & Automation</span>
+          <span class="skill-tag">AI Observability (ML workloads)</span>
+          <span class="skill-tag">Prompt Engineering</span>
+        </div>
+      </div>
+      <div class="skill-card fade-up">
+        <div class="skill-icon"><i class="fa-solid fa-language"></i></div>
+        <div class="skill-title">Languages</div>
+        <div class="skill-tags">
           <span class="skill-tag">Spanish — C2 Native</span>
           <span class="skill-tag">English — C2 Fluent</span>
           <span class="skill-tag">German — A1</span>
